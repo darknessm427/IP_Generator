@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+  <meta charset="UTF-8" />
+  <title>ÐΛɌ₭ᑎΞ𐒡𐒡|𓄂𓆃</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #121212;
+      color: #e0e0e0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin: 0;
+      padding: 20px;
+      min-height: 100vh;
+      position: relative;
+      overflow: hidden;
+      z-index: 0;
+    }
+
+    #matrix-canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      pointer-events: none;
+      z-index: -1;
+      opacity: 0.15;
+      background: transparent;
+    }
+
+    .header-container {
+      border: 2px solid #00D6FF;
+      background: linear-gradient(135deg, #1f1f1f, #2c2c2c);
+      padding: 15px 40px;
+      border-radius: 12px;
+      margin-bottom: 30px;
+      box-shadow: 0 0 10px #02FBFF;
+      user-select: none;
+      z-index: 1;
+    }
+
+    .header-container h1 {
+      margin: 0;
+      font-size: 28px;
+      letter-spacing: 3px;
+      color: #FF007A;
+      font-weight: 700;
+      text-shadow: 0 0 10px #FF007C;
+    }
+
+    .buttons-container {
+      display: flex;
+      gap: 15px;
+      margin-bottom: 20px;
+      z-index: 1;
+    }
+
+    .toggle-btn {
+      padding: 10px 25px;
+      border-radius: 8px;
+      border: none;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      background-color: #222;
+      color: #01645D;
+      box-shadow: 0 0 5px #02FBFF;
+      transition: background-color 0.3s, color 0.3s;
+      user-select: none;
+      z-index: 1;
+    }
+
+    .toggle-btn.active {
+      background-color: #01FAFF;
+      color: #121212;
+      box-shadow: 0 0 10px #076D8B;
+    }
+
+    .toggle-btn:hover:not(.active) {
+      background-color: #333;
+      color: #028CBD;
+    }
+
+    .ips-container {
+      width: 100%;
+      max-width: 900px;
+      background-color: #1e1e1e;
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: 0 0 15px #006E6E inset;
+      min-height: 300px;
+      z-index: 1;
+    }
+
+    .ip-group h2 {
+      text-align: center;
+      margin-bottom: 15px;
+      font-weight: 700;
+      font-size: 30px;
+      color: #C37FFF;
+      text-shadow: 0 0 8px #9D4FFF;
+      user-select: none;
+    }
+
+    .ip-box {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background-color: #292929;
+      border-radius: 8px;
+      padding: 10px 15px;
+      margin-bottom: 12px;
+      box-shadow: 0 0 5px #938FFF;
+      user-select: text;
+    }
+
+    .ip-text {
+      font-family: 'Courier New', Courier, monospace;
+      font-size: 16px;
+      color: #FFFD82;
+      word-break: break-all;
+      flex: 1;
+    }
+
+    .copy-btn {
+      margin-left: 15px;
+      padding: 6px 14px;
+      border: none;
+      border-radius: 6px;
+      background-color: aqua;
+      color: #121212;
+      font-weight: 700;
+      font-size: 14px;
+      cursor: pointer;
+      box-shadow: 0 0 5px #056A80;
+      display: flex;
+      align-items: center;
+      transition: background-color 0.3s;
+      user-select: none;
+    }
+
+    .copy-btn:hover {
+      background-color: #FF0E85;
+    }
+
+    .checkmark {
+      margin-left: 8px;
+      color: #00ff00;
+      font-size: 20px;
+      display: none;
+      user-select: none;
+    }
+
+    #dark-icon {
+      position: fixed;
+      bottom: 10px;
+      left: 10px;
+      width: 40px;
+      height: 40px;
+      background-image: url('https://raw.githubusercontent.com/darknessm427/Hiddify-warp/main/Darkness.png');
+      background-size: contain;
+      background-repeat: no-repeat;
+      cursor: pointer;
+      z-index: 2;
+      transition: transform 0.2s;
+    }
+
+    #dark-icon:hover {
+      transform: scale(1.1);
+    }
+  </style>
+</head>
+<body>
+
+  <canvas id="matrix-canvas"></canvas>
+
+  
+  <div class="header-container">
+    <h1>CLEAN IP</h1>
+  </div>
+
+  <div class="buttons-container">
+    <button id="btn-ipv4" class="toggle-btn active">IPv4</button>
+    <button id="btn-ipv6" class="toggle-btn">IPv6</button>
+  </div>
+
+  <div class="ips-container">
+    <div id="ipv4-group" class="ip-group"></div>
+
+    <div id="ipv6-group" class="ip-group" style="display:none;"></div>
+  </div>
+
+  <a id="dark-icon" href="https://t.me/darkness_427" target="_blank" rel="noopener noreferrer" title="Go Channel telegram"></a>
+
+  <script>
+    (function() {
+      const canvas = document.getElementById('matrix-canvas');
+      const ctx = canvas.getContext('2d');
+
+      let width, height;
+      function resize() {
+        width = window.innerWidth;
+        height = window.innerHeight;
+        canvas.width = width;
+        canvas.height = height;
+      }
+      window.addEventListener('resize', resize);
+      resize();
+
+      const matrixChars = ['ÐΛɌ₭ᑎΞ𐒡𐒡'];
+
+      const fontSize = 12;
+
+      const columns = Math.floor(width / fontSize);
+
+      const drops = [];
+
+      for (let x = 0; x < columns; x++) {
+        drops[x] = Math.random() * height / fontSize;
+      }
+
+      const colors = [
+        '#008b8b',  // Dark Aqua
+        '#00ffff',  // Aqua
+        '#007fff'   // Blue
+      ];
+
+      function draw() {
+        ctx.fillStyle = 'rgba(18, 18, 18, 0.1)';
+        ctx.fillRect(0, 0, width, height);
+
+        ctx.font = fontSize + 'px monospace';
+        ctx.textBaseline = 'top';
+
+        for (let i = 0; i < columns; i++) {
+          const char = matrixChars[Math.floor(Math.random() * matrixChars.length)];
+
+          const color = colors[i % colors.length];
+          ctx.fillStyle = color;
+
+          ctx.fillText(char, i * fontSize, drops[i] * fontSize);
+
+          drops[i] += 0.3;
+
+          if (drops[i] * fontSize > height && Math.random() > 0.975) {
+            drops[i] = 0;
+          }
+        }
+      }
+
+      setInterval(draw, 50); // speed mtrx
+
+    })();
+
+
+    const url = 'https://raw.githubusercontent.com/darknessm427/IP_Generator/refs/heads/main/ips.txt';
+
+    const ipv4Group = document.getElementById('ipv4-group');
+    const ipv6Group = document.getElementById('ipv6-group');
+    const btnIPv4 = document.getElementById('btn-ipv4');
+    const btnIPv6 = document.getElementById('btn-ipv6');
+
+    let ipv4IPs = [];
+    let ipv6IPs = [];
+
+    async function loadIPs() {
+      try {
+        const response = await fetch(url);
+        const text = await response.text();
+        const ips = text.split('\n').map(ip => ip.trim()).filter(ip => ip !== '');
+
+        ipv4IPs = [];
+        ipv6IPs = [];
+
+        ips.forEach(ip => {
+          if (ip.startsWith('IPv4:') || ip.startsWith('IPv6:')) {
+            return; // Skip lines that start with "IPv4:" or "IPv6:"
+          }
+          if (ip.includes('.')) {
+            ipv4IPs.push(ip);
+          } else {
+            ipv6IPs.push(ip);
+          }
+        });
+
+        renderIPs('ipv4');
+      } catch (e) {
+        ipv4Group.textContent = ' error upload ip ';
+        ipv6Group.textContent = ' error upload ip ';
+        console.error(e);
+      }
+    }
+
+    function createIPBox(ip) {
+      const div = document.createElement('div');
+      div.className = 'ip-box';
+
+      const span = document.createElement('span');
+      span.className = 'ip-text';
+      span.textContent = ip;
+
+      const btn = document.createElement('button');
+      btn.className = 'copy-btn';
+      btn.innerHTML = `
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="#121212" viewBox="0 0 24 24">
+          <path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/>
+        </svg>
+      `;
+
+      const check = document.createElement('span');
+      check.className = 'checkmark';
+      check.textContent = '✔';
+
+      btn.onclick = () => {
+        navigator.clipboard.writeText(ip).then(() => {
+          btn.classList.add('copied');
+          check.style.display = 'inline';
+
+          setTimeout(() => {
+            btn.classList.remove('copied');
+            check.style.display = 'none';
+          }, 1200);
+        }).catch(() => {
+          alert('  Dont Copy !');
+        });
+      };
+
+      div.appendChild(span);
+      div.appendChild(btn);
+      div.appendChild(check);
+
+      return div;
+    }
+
+    function renderIPs(type) {
+      if (type === 'ipv4') {
+        ipv4Group.style.display = 'block';
+        ipv6Group.style.display = 'none';
+        ipv4Group.innerHTML = '<h2>IPv4</h2>';
+        ipv4IPs.forEach(ip => {
+          ipv4Group.appendChild(createIPBox(ip));
+        });
+        btnIPv4.classList.add('active');
+        btnIPv6.classList.remove('active');
+      } else {
+        ipv6Group.style.display = 'block';
+        ipv4Group.style.display = 'none';
+        ipv6Group.innerHTML = '<h2>IPv6</h2>';
+        ipv6IPs.forEach(ip => {
+          ipv6Group.appendChild(createIPBox(ip));
+        });
+        btnIPv6.classList.add('active');
+        btnIPv4.classList.remove('active');
+      }
+    }
+
+    btnIPv4.addEventListener('click', () => {
+      renderIPs('ipv4');
+    });
+
+    btnIPv6.addEventListener('click', () => {
+      renderIPs('ipv6');
+    });
+
+    loadIPs();
+  </script>
+
+</body>
+</html>
