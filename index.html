@@ -40,6 +40,9 @@
       box-shadow: 0 0 10px #02FBFF;
       user-select: none;
       z-index: 1;
+      width: 100%;
+      max-width: 900px;
+      box-sizing: border-box;
     }
 
     .header-container h1 {
@@ -49,6 +52,7 @@
       color: #FF007A;
       font-weight: 700;
       text-shadow: 0 0 10px #FF007C;
+      text-align: center;
     }
 
     .buttons-container {
@@ -56,6 +60,11 @@
       gap: 15px;
       margin-bottom: 20px;
       z-index: 1;
+      width: 100%;
+      max-width: 900px;
+      justify-content: center;
+      flex-wrap: wrap;
+      box-sizing: border-box;
     }
 
     .toggle-btn {
@@ -71,6 +80,8 @@
       transition: background-color 0.3s, color 0.3s;
       user-select: none;
       z-index: 1;
+      min-width: 100px;
+      text-align: center;
     }
 
     .toggle-btn.active {
@@ -93,6 +104,7 @@
       box-shadow: 0 0 15px #006E6E inset;
       min-height: 300px;
       z-index: 1;
+      box-sizing: border-box;
     }
 
     .ip-group h2 {
@@ -115,14 +127,17 @@
       margin-bottom: 12px;
       box-shadow: 0 0 5px #938FFF;
       user-select: text;
+      flex-wrap: wrap;
     }
 
     .ip-text {
       font-family: 'Courier New', Courier, monospace;
       font-size: 16px;
       color: #FFFD82;
-      word-break: break-all;
-      flex: 1;
+      word-break: break-word;
+      flex: 1 1 auto;
+      min-width: 0;
+      margin-right: 10px;
     }
 
     .copy-btn {
@@ -140,6 +155,7 @@
       align-items: center;
       transition: background-color 0.3s;
       user-select: none;
+      flex-shrink: 0;
     }
 
     .copy-btn:hover {
@@ -170,6 +186,106 @@
 
     #dark-icon:hover {
       transform: scale(1.1);
+    }
+
+    /* Media Queries for responsiveness */
+
+    /* Small devices (phones, less than 600px) */
+    @media (max-width: 599px) {
+      .header-container {
+        padding: 12px 20px;
+        margin-bottom: 20px;
+      }
+
+      .header-container h1 {
+        font-size: 22px;
+        letter-spacing: 2px;
+      }
+
+      .buttons-container {
+        gap: 10px;
+      }
+
+      .toggle-btn {
+        padding: 8px 15px;
+        font-size: 14px;
+        min-width: 80px;
+      }
+
+      .ips-container {
+        padding: 15px;
+        min-height: 250px;
+      }
+
+      .ip-group h2 {
+        font-size: 24px;
+        margin-bottom: 12px;
+      }
+
+      .ip-box {
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+      }
+
+      .ip-text {
+        font-size: 16px;
+        margin-right: auto;
+        margin-bottom: 0px;
+        
+      }
+
+      .copy-btn {
+        width: auto;
+        justify-content: center;
+        margin-left: 18px;
+      }
+    }
+
+    /* Medium devices (tablets, 600px and up) */
+    @media (min-width: 600px) and (max-width: 899px) {
+      .header-container {
+        padding: 15px 30px;
+      }
+
+      .header-container h1 {
+        font-size: 26px;
+      }
+
+      .buttons-container {
+        gap: 12px;
+      }
+
+      .toggle-btn {
+        padding: 9px 20px;
+        font-size: 15px;
+        min-width: 90px;
+      }
+
+      .ips-container {
+        padding: 18px;
+      }
+
+      .ip-group h2 {
+        font-size: 28px;
+      }
+
+      .ip-box {
+        flex-wrap: nowrap;
+      }
+
+      .ip-text {
+        font-size: 15px;
+      }
+
+      .copy-btn {
+        width: auto;
+      }
+    }
+
+    /* Large devices (desktops, 900px and up) */
+    @media (min-width: 900px) {
+      /* Default styles already optimized for desktop */
     }
   </style>
 </head>
